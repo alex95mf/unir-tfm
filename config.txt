@@ -1,0 +1,3 @@
+Nube: AWS
+Hardware: t2.micro
+Ruta Proyecto: ./Build
