@@ -1,6 +1,9 @@
 # Local .terraform directories
 **/.terraform/*
 
+# Exclude Terraform .terraform directory
+Terraform_configuration/.terraform/
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
