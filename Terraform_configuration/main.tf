@@ -1,4 +1,3 @@
-# Importa la plantilla de configuración AWS
 terraform {
   required_providers {
     aws = {
@@ -9,35 +8,18 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region     = var.aws_region
   access_key = var.access_key
   secret_key = var.secret_key
 }
 
-# Utiliza la plantilla de configuración para definir recursos
-data "template_file" "aws_config" {
-  template = file("./aws.tf.template")
+module "aws_resources" {
+  source = "./modules/aws_resources"
 
-  vars = {
-    selected_hardware = var.selected_hardware
-  }
+  selected_hardware = var.selected_hardware
+  instance_name     = var.instance_name
+  s3_bucket         = var.s3_bucket
+  desired_instances = var.desired_instances
+  min_instances     = var.min_instances
+  max_instances     = var.max_instances
 }
-
-variable "selected_hardware" {
-  description = "Tipo de hardware seleccionado"
-  type        = string
-  default     = "t2.micro"  # Valor predeterminado
-}
-
-variable "access_key" {
-  description = "Access Key"
-  type        = string
-  default     = "default_value"
-}
-
-variable "secret_key" {
-  description = "Secret Key"
-  type        = string
-  default     = "default_value"
-}
-

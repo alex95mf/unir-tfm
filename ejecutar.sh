@@ -11,8 +11,8 @@ error_exit() {
   done
 
   # Ejecutar delete_terraform.sh
-  echo "Ejecutando delete_terraform.sh..."
-  ./delete_terraform.sh
+  echo "Ejecutando eliminar.sh..."
+  ./eliminar.sh
   exit 1
 }
 
@@ -30,8 +30,17 @@ apply_terraform_changes() {
 
 # Función para subir archivos de build a S3
 upload_build_to_s3() {
-  echo "Subiendo archivos de build a S3..."
-  aws s3 cp . s3://unir-tesis-bucket-unico/ --recursive || error_exit "Error al subir archivos a S3."
+  # Obtener el nombre del bucket S3 de la variable de entorno
+  local s3_bucket_name="$TF_VAR_s3_bucket"  
+  
+  # Verificar si el nombre del bucket está definido
+  if [ -z "$s3_bucket_name" ]; then
+    error_exit "El nombre del bucket S3 no está definido en la variable de entorno TF_VAR_s3_bucket."
+  fi
+
+  echo "Subiendo archivos de build al bucket S3: $s3_bucket_name..."
+  # Usar el nombre del bucket S3 para subir archivos
+  aws s3 cp . "s3://$s3_bucket_name/" --recursive || error_exit "Error al subir archivos a S3."
 }
 
 # Cambiar al directorio del proyecto
@@ -45,7 +54,8 @@ change_to_project_directory() {
 # Cambiar al directorio de build
 change_to_build_directory() {
   local target_dir="../build"
-
+  echo
+  echo "**************************************************************************"
   echo "Cambiando al directorio de build..."
   cd "$target_dir" || error_exit "No se pudo acceder al directorio de build."
 }
@@ -54,7 +64,7 @@ change_to_build_directory() {
 check_and_cleanup_terraform() {
   if [ -f "./terraform_configuration/terraform.tfstate" ] || [ -f "./terraform_configuration/terraform.tfstate.backup" ]; then
     echo "Terraform ya ha sido inicializado. Ejecutando delete_terraform.sh..."
-    ./delete_terraform.sh || error_exit "Error al ejecutar delete_terraform.sh"
+    ./eliminar.sh || error_exit "Error al ejecutar eliminar.sh"
   fi
 }
 

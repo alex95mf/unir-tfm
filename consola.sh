@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Función para seleccionar la nube de despliegue
+# FunciÃ³n para seleccionar la nube de despliegue
 select_cloud() {
     echo "Selecciona la nube de despliegue:"
     select cloud in "Amazon Web Services (AWS)"; do
@@ -10,22 +10,22 @@ select_cloud() {
                 break
                 ;;
             *)
-                echo "Selecciona una opción válida."
+                echo "Selecciona una opciÃ³n vÃ¡lida."
                 ;;
         esac
     done
 }
 
-# Función para solicitar las credenciales de AWS
+# FunciÃ³n para solicitar las credenciales de AWS
 input_aws_credentials() {
     read -p "Introduce el Access Key ID: " aws_access_key
     read -sp "Introduce el Secret Access Key: " aws_secret_key
     echo
 }
 
-# Función para seleccionar las características de hardware
+# FunciÃ³n para seleccionar las caracterÃ­sticas de hardware
 select_hardware() {
-    echo "Selecciona las características de hardware para la infraestructura: (por defecto: t2.micro)"
+    echo "Selecciona las caracterÃ­sticas de hardware para la infraestructura: (por defecto: t2.micro)"
     
     hardware_options=("t2.nano" "t2.micro" "t2.small" "t2.medium" "t2.large" "t2.xlarge" "t2.2xlarge"
                       "t3.nano" "t3.micro" "t3.small" "t3.medium" "t3.large" "t3.xlarge" "t3.2xlarge"
@@ -51,67 +51,73 @@ select_hardware() {
     selected_hardware=${selected_hardware:-"t2.micro"}
 }
 
-# Función para seleccionar la región de despliegue
+# FunciÃ³n para seleccionar la regiÃ³n de despliegue
 select_region() {
-    read -p "Introduce la región de AWS (por defecto: us-east-1): " aws_region
+    echo "Selecciona la regiÃ³n de AWS:"
+    select region in "us-east-1" "us-east-2" "us-west-1" "us-west-2" "ca-central-1" "eu-west-1" "eu-west-2" "eu-west-3" "eu-central-1" "eu-north-1" "ap-east-1" "ap-south-1" "ap-southeast-1" "ap-southeast-2" "ap-northeast-1"; do
+        aws_region="$region"
+        break
+    done
+
+    # Valor por defecto
     aws_region=${aws_region:-"us-east-1"}
 }
 
-# Función para seleccionar el nombre de la instancia EC2
+# FunciÃ³n para seleccionar el nombre de la instancia EC2
 select_instance_name() {
     read -p "Introduce el nombre de la instancia EC2 (por defecto: web-server): " instance_name
     instance_name=${instance_name:-"web-server"}
 }
 
-# Función para seleccionar el número de instancias
+# FunciÃ³n para seleccionar el nÃºmero de instancias
 select_instance_count() {
     while true; do
-        read -p "Introduce el número mínimo de instancias (por defecto: 1): " min_instances
+        read -p "Introduce el nÃºmero mÃ­nimo de instancias (por defecto: 1): " min_instances
         min_instances=${min_instances:-1}
         
         if ! [[ "$min_instances" =~ ^[0-9]+$ ]]; then
-            echo "Por favor, introduce un número válido para el mínimo de instancias."
+            echo "Por favor, introduce un nÃºmero vÃ¡lido para el mÃ­nimo de instancias."
             continue
         elif (( min_instances < 0 )); then
-            echo "El número mínimo de instancias no puede ser negativo."
+            echo "El nÃºmero mÃ­nimo de instancias no puede ser negativo."
             continue
         fi
         break
     done
 
     while true; do
-        read -p "Introduce el número deseado de instancias (por defecto: 2): " desired_instances
+        read -p "Introduce el nÃºmero deseado de instancias (por defecto: 2): " desired_instances
         desired_instances=${desired_instances:-2}
         
         if ! [[ "$desired_instances" =~ ^[0-9]+$ ]]; then
-            echo "Por favor, introduce un número válido para el deseado de instancias."
+            echo "Por favor, introduce un nÃºmero vÃ¡lido para el deseado de instancias."
             continue
         elif (( desired_instances < min_instances )); then
-            echo "El número deseado de instancias no puede ser menor que el número mínimo de instancias."
+            echo "El nÃºmero deseado de instancias no puede ser menor que el nÃºmero mÃ­nimo de instancias."
             continue
         fi
         break
     done
 
     while true; do
-        read -p "Introduce el número máximo de instancias (por defecto: 3): " max_instances
+        read -p "Introduce el nÃºmero mÃ¡ximo de instancias (por defecto: 3): " max_instances
         max_instances=${max_instances:-3}
         
         if ! [[ "$max_instances" =~ ^[0-9]+$ ]]; then
-            echo "Por favor, introduce un número válido para el máximo de instancias."
+            echo "Por favor, introduce un nÃºmero vÃ¡lido para el mÃ¡ximo de instancias."
             continue
         elif (( max_instances < min_instances )); then
-            echo "El número máximo de instancias no puede ser menor que el número mínimo de instancias."
+            echo "El nÃºmero mÃ¡ximo de instancias no puede ser menor que el nÃºmero mÃ­nimo de instancias."
             continue
         elif (( max_instances < desired_instances )); then
-            echo "El número máximo de instancias no puede ser menor que el número deseado de instancias."
+            echo "El nÃºmero mÃ¡ximo de instancias no puede ser menor que el nÃºmero deseado de instancias."
             continue
         fi
         break
     done
 }
 
-# Función para seleccionar el nombre del bucket S3
+# FunciÃ³n para seleccionar el nombre del bucket S3
 select_s3_bucket() {
     read -p "Introduce el nombre del bucket S3 (por defecto: unir-tesis-s3): " s3_bucket
     s3_bucket=${s3_bucket:-"unir-tesis-s3"}
@@ -133,23 +139,23 @@ select_s3_bucket
 # Mostrar las opciones seleccionadas por el usuario
 echo "Nube seleccionada: $selected_cloud"
 echo "Hardware seleccionado: $selected_hardware"
-echo "Región seleccionada: $aws_region"
+echo "RegiÃ³n seleccionada: $aws_region"
 echo "Nombre de instancia EC2: $instance_name"
-echo "Número mínimo de instancias: $min_instances"
-echo "Número deseado de instancias: $desired_instances"
-echo "Número máximo de instancias: $max_instances"
+echo "NÃºmero mÃ­nimo de instancias: $min_instances"
+echo "NÃºmero deseado de instancias: $desired_instances"
+echo "NÃºmero mÃ¡ximo de instancias: $max_instances"
 echo "Nombre del bucket S3: $s3_bucket"
 
 # Almacenar las opciones seleccionadas en un archivo (por ejemplo, config.txt)
 cat <<EOL > config.txt
-Nube: $selected_cloud
-Hardware: $selected_hardware
-Región: $aws_region
-Nombre de instancia EC2: $instance_name
-Número mínimo de instancias: $min_instances
-Número deseado de instancias: $desired_instances
-Número máximo de instancias: $max_instances
-Nombre del bucket S3: $s3_bucket
+cloud: $selected_cloud
+hardware: $selected_hardware
+region: $aws_region
+instance_name: $instance_name
+min_instances: $min_instances
+desired_instances: $desired_instances
+max_instances: $max_instances
+bucket_name: $s3_bucket
 EOL
 
 if [[ "$1" == "-c" ]]; then
@@ -162,5 +168,5 @@ fi
 
 echo "Opciones almacenadas en config.txt"
 
-# Ejecutar el script de inicialización de Terraform
-bash inicializacion_terraform.sh
+# Ejecutar el script de inicializaciÃ³n de Terraform
+bash inicializar.sh
