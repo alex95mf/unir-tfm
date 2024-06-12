@@ -46,6 +46,3 @@ echo "TF_VAR_desired_instances: $TF_VAR_desired_instances"
 echo "TF_VAR_max_instances: $TF_VAR_max_instances"
 echo "**************************************************************************"
 echo
-
- # Ejecutar el script de arranque de Terraform
-bash ejecutar.sh

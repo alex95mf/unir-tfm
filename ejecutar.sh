@@ -30,13 +30,17 @@ apply_terraform_changes() {
 
 # Función para subir archivos de build a S3
 upload_build_to_s3() {
-  # Obtener el nombre del bucket S3 de la variable de entorno
-  local s3_bucket_name="$TF_VAR_s3_bucket"  
+  cd ..
+
+  # Obtener el nombre del bucket S3 del archivo config.txt
+  local s3_bucket_name=$(grep "bucket_name:" config.txt | cut -d " " -f 2-)
   
   # Verificar si el nombre del bucket está definido
   if [ -z "$s3_bucket_name" ]; then
-    error_exit "El nombre del bucket S3 no está definido en la variable de entorno TF_VAR_s3_bucket."
+    error_exit "El nombre del bucket S3 no está definido en el archivo config.txt."
   fi
+
+  change_to_build_directory
 
   echo "Subiendo archivos de build al bucket S3: $s3_bucket_name..."
   # Usar el nombre del bucket S3 para subir archivos
@@ -53,7 +57,7 @@ change_to_project_directory() {
 
 # Cambiar al directorio de build
 change_to_build_directory() {
-  local target_dir="../build"
+  local target_dir="./build"
   echo
   echo "**************************************************************************"
   echo "Cambiando al directorio de build..."
@@ -75,7 +79,6 @@ main() {
   check_and_cleanup_terraform
   initialize_terraform
   apply_terraform_changes
-  change_to_build_directory
   upload_build_to_s3
 }
 

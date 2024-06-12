@@ -170,3 +170,6 @@ echo "Opciones almacenadas en config.txt"
 
 # Ejecutar el script de inicialización de Terraform
 bash inicializar.sh
+
+# Ejecutar el script de arranque de Terraform
+bash ejecutar.sh
