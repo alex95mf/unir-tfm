@@ -67,11 +67,10 @@ change_to_build_directory() {
 # Función para verificar si Terraform ya ha sido inicializado y limpiar si es necesario
 check_and_cleanup_terraform() {
   if [ -f "./terraform_configuration/terraform.tfstate" ] || [ -f "./terraform_configuration/terraform.tfstate.backup" ]; then
-    echo "Terraform ya ha sido inicializado. Ejecutando delete_terraform.sh..."
+    echo "Terraform ya ha sido inicializado. Ejecutando eliminar.sh..."
     ./eliminar.sh || error_exit "Error al ejecutar eliminar.sh"
   fi
 }
-
 
 # Función principal
 main() {  

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Ejecutar el script de inicialización de Terraform
-bash inicializar.sh
-
 # Cambiar al directorio de configuración de Terraform
 cd ./terraform_configuration || { echo "Error: No se pudo acceder al directorio de configuración de Terraform."; exit 1; }
 

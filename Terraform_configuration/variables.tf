@@ -35,13 +35,13 @@ variable "min_instances" {
 variable "desired_instances" {
   description = "Desired number of instances"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "max_instances" {
   description = "Maximum number of instances"
   type        = number
-  default     = 3
+  default     = 2
 }
 
 variable "aws_region" {
