@@ -86,8 +86,8 @@ select_instance_count() {
     done
 
     while true; do
-        read -p "Introduce el número deseado de instancias (por defecto: 2): " desired_instances
-        desired_instances=${desired_instances:-2}
+        read -p "Introduce el número deseado de instancias (por defecto: 1): " desired_instances
+        desired_instances=${desired_instances:-1}
         
         if ! [[ "$desired_instances" =~ ^[0-9]+$ ]]; then
             echo "Por favor, introduce un número válido para el deseado de instancias."
@@ -100,8 +100,8 @@ select_instance_count() {
     done
 
     while true; do
-        read -p "Introduce el número máximo de instancias (por defecto: 3): " max_instances
-        max_instances=${max_instances:-3}
+        read -p "Introduce el número máximo de instancias (por defecto: 2): " max_instances
+        max_instances=${max_instances:-2}
         
         if ! [[ "$max_instances" =~ ^[0-9]+$ ]]; then
             echo "Por favor, introduce un número válido para el máximo de instancias."
